@@ -1,0 +1,50 @@
+{% extends "store/base.html" %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 40px auto; text-align: center;">
+    <h2 style="color: #0077cc; font-weight: 700; margin-bottom: 20px;">Order History</h2>
+    {% if orders %}
+        <table style="width: 100%; border-collapse: collapse; box-shadow: 0 2px 12px rgba(0,0,0,0.1); border-radius: 12px; overflow: hidden;">
+            <thead style="background: linear-gradient(90deg, #0077cc, #00c6ff); color: white;">
+                <tr>
+                    <th style="padding: 12px 20px; text-align: left;">Order ID</th>
+                    <th style="padding: 12px 20px; text-align: left;">Date</th>
+                    <th style="padding: 12px 20px; text-align: left;">Items</th>
+                    <th style="padding: 12px 20px; text-align: left;">Total Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 12px 20px;">{{ order.id }}</td>
+                        <td style="padding: 12px 20px;">{{ order.created_at|date:"M d, Y" }}</td>
+                        <td style="padding: 12px 20px; text-align: left;">
+                            <ul style="list-style: none; padding-left: 0; margin: 0;">
+                                {% for item in order.items.all %}
+                                    <li>{{ item.book.title }} (x{{ item.quantity }})</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td style="padding: 12px 20px;">&#8377;{{ order.get_total_price }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p style="color: #cc0000; font-size: 1.2rem;">You have no past orders.</p>
+    {% endif %}
+</div>
+
+<style>
+table {
+    border-radius: 12px;
+    overflow: hidden;
+}
+th, td {
+    font-weight: 500;
+}
+tbody tr:hover {
+    background-color: #f0f8ff;
+}
+</style>
+{% endblock %}

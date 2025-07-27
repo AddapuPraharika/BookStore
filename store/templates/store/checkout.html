@@ -1,0 +1,40 @@
+{% extends "store/base.html" %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 40px auto; padding: 20px; background: linear-gradient(135deg, #28a745 60%, #a8e063 100%); border-radius: 16px; color: white; box-shadow: 0 4px 20px rgba(40, 167, 69, 0.3);">
+    <h2 style="text-align: center; font-weight: 700; margin-bottom: 30px;">Checkout</h2>
+    <form method="post" style="display: flex; flex-direction: column; gap: 20px;">
+        {% csrf_token %}
+        <label for="address" style="font-weight: 600;">Shipping Address:</label>
+        <textarea id="address" name="address" rows="4" style="padding: 10px; border-radius: 8px; border: none; font-size: 1rem;"></textarea>
+
+        <label for="payment_method" style="font-weight: 600;">Payment Method:</label>
+        <select id="payment_method" name="payment_method" style="padding: 10px; border-radius: 8px; border: none; font-size: 1rem;">
+            <option value="credit_card">Credit Card</option>
+            <option value="debit_card">Debit Card</option>
+            <option value="paypal">PayPal</option>
+        </select>
+
+        <button type="submit" class="custom-btn checkout-btn" style="align-self: center; padding: 12px 40px; font-weight: 700; border-radius: 8px; background: linear-gradient(90deg, #28a745, #a8e063); color: white; cursor: pointer; transition: box-shadow 0.3s ease;">Place Order</button>
+    </form>
+</div>
+
+<style>
+.custom-btn {
+    padding: 12px 28px;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    margin: 0 5px;
+    transition: box-shadow 0.2s, background 0.2s;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+}
+.checkout-btn:hover {
+    box-shadow: 0 4px 12px #28a745aa;
+    opacity: 0.95;
+}
+</style>
+{% endblock %}

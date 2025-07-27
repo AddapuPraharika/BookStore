@@ -1,0 +1,49 @@
+{% extends "store/base.html" %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 60px auto; background: linear-gradient(135deg, #e7f3fe 60%, #f5f7fa 100%); border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); padding: 36px 32px; text-align: center;">
+    <h2 style="color: #0077cc; margin-bottom: 24px;">Your Cart</h2>
+    {% if books_with_quantity %}
+        <ul style="list-style: none; padding: 0;">
+            {% for item in books_with_quantity %}
+                <li style="background: #fff; margin-bottom: 12px; padding: 16px; border-radius: 8px; box-shadow: 0 1px 4px #0077cc22;">
+                    <strong>{{ item.book.title }}</strong> by {{ item.book.author }}<br>
+                    <span>{{ item.book.description }}</span><br>
+                    <span style="color: #0077cc;">&#8377;{{ item.book.price }}</span><br>
+                    <span>Quantity: {{ item.quantity }}</span>
+                    <form action="{% url 'remove_from_cart' item.book.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" style="background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; margin-left: 10px;">Remove</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p style="color: #555; font-size: 1.1rem;">Your cart is currently empty.</p>
+    {% endif %}
+    {% if total_amount %}
+        <h3 style="color: #0077cc; margin-top: 24px;">Total Amount: &#8377;{{ total_amount }}</h3>
+    {% endif %}
+    <a href="{% url 'dashboard' %}" class="custom-btn cart-btn" style="margin-top: 24px;">Go to Dashboard</a>
+    {% if books_with_quantity %}
+        <a href="{% url 'checkout' %}" class="custom-btn cart-btn" style="margin-top: 24px; margin-left: 10px;">Proceed to Checkout</a>
+    {% endif %}
+</div>
+{% endblock %}
+
+<style>
+.custom-btn {
+    padding: 12px 28px;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    margin: 0 5px;
+    transition: box-shadow 0.2s, background 0.2s;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+}
+.cart-btn { background: linear-gradient(90deg, #0077cc, #00c6ff); }
+.custom-btn:hover { box-shadow: 0 2px 8px #0077cc55; opacity: 0.92; }
+</style>

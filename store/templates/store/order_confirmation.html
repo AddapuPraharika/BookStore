@@ -1,0 +1,29 @@
+{% extends "store/base.html" %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 40px auto; padding: 20px; background: linear-gradient(135deg, #0077cc 60%, #00c6ff 100%); border-radius: 16px; color: white; box-shadow: 0 4px 20px rgba(0, 118, 204, 0.3); text-align: center;">
+    <h2 style="font-weight: 700; margin-bottom: 30px;">Order Confirmation</h2>
+    <p style="font-size: 1.2rem;">Thank you for your order! Your order number is <strong>{{ order.id }}</strong>.</p>
+    <p style="margin-top: 20px;">You will receive an email confirmation shortly.</p>
+    <a href="{% url 'dashboard' %}" class="custom-btn home-btn" style="margin-top: 30px; padding: 12px 40px; background: linear-gradient(90deg, #0077cc, #00c6ff); color: white; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-block;">Back to Dashboard</a>
+</div>
+
+<style>
+.custom-btn {
+    padding: 12px 28px;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    margin: 0 5px;
+    transition: box-shadow 0.2s, background 0.2s;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+}
+.home-btn:hover {
+    box-shadow: 0 4px 12px #0077ccaa;
+    opacity: 0.95;
+}
+</style>
+{% endblock %}

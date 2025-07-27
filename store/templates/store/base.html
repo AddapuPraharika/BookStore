@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Unique BookStore</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+            color: #333;
+        }
+        header {
+            background: linear-gradient(90deg, #0077cc, #00c6ff);
+            color: white;
+            padding: 25px 0;
+            text-align: center;
+            font-size: 2.5em;
+            font-weight: 700;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 12px rgba(0, 118, 204, 0.4);
+        }
+        nav {
+            background-color: #005fa3;
+            padding: 12px 0;
+            box-shadow: 0 2px 8px rgba(0, 95, 163, 0.3);
+        }
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            margin: 0 18px;
+            font-size: 1.15em;
+            font-weight: 600;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: inset 0 0 0 0 transparent;
+            display: inline-block;
+        }
+        nav ul li a:hover {
+            background-color: #004a99;
+            box-shadow: inset 0 0 8px 2px #00c6ff;
+        }
+        .nav-btn {
+            background-color: #0077cc;
+            color: white !important;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: inset 0 0 0 0 transparent;
+            display: inline-block;
+        }
+        .nav-btn:hover {
+            background-color: #004a99;
+            box-shadow: inset 0 0 8px 2px #00c6ff;
+        }
+        .welcome-message {
+            text-align: center;
+            margin: 30px 0;
+            font-size: 1.2em;
+        }
+        .messages {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #e7f3fe;
+            border: 1px solid #b3d4fc;
+            color: #31708f;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <header>Unique BookStore</header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}" class="nav-btn">Home</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'dashboard' %}" class="nav-btn">Dashboard</a></li>
+                <li><a href="{% url 'wishlist' %}" class="nav-btn">Wishlist</a></li>
+                <li><a href="{% url 'profile' %}" class="nav-btn">Profile</a></li>
+                <li><a href="{% url 'order_history' %}" class="nav-btn">Order History</a></li>
+                <li><a href="{% url 'checkout' %}" class="nav-btn">Checkout</a></li>
+                <li><a href="{% url 'cart' %}" class="nav-btn">Cart{% with request.session.cart|length as cart_count %}{% if cart_count > 0 %} ({{ cart_count }}){% endif %}{% endwith %}</a></li>
+                <li style="display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; font-weight: 600; font-size: 1rem; margin: 0 10px;">
+                    <span>Welcome,</span>
+                    <span style="font-size: 1.2rem; font-weight: 700;">{{ user.username }}!</span>
+                </li>
+                <li><a href="{% url 'logout' %}" class="nav-btn">Logout</a></li>
+            {% else %}
+                <li><a href="{% url 'login' %}" class="nav-btn">Login</a></li>
+                <li><a href="{% url 'register' %}" class="nav-btn">Register</a></li>
+                <li><a href="{% url 'cart' %}" class="nav-btn">Cart</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <hr>
+    {% if messages %}
+        <div class="messages">
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

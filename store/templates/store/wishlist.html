@@ -1,0 +1,51 @@
+{% extends "store/base.html" %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 40px auto; text-align: center;">
+    <h2 style="color: #0077cc; font-weight: 700; margin-bottom: 20px;">My Wishlist</h2>
+    {% if wishlist_items %}
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+            {% for item in wishlist_items %}
+                <div style="background: linear-gradient(135deg, #fceabb 60%, #f8b500 100%); border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.1); width: 280px; padding: 20px; text-align: left; transition: transform 0.2s, box-shadow 0.2s;"
+                     onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 6px 24px #f8b500aa'"
+                     onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 2px 12px rgba(0,0,0,0.1)'">
+                    <h4 style="color: #b36b00; font-size: 1.3rem; margin-bottom: 8px;">
+                        <a href="{% url 'book_detail' item.book.id %}" style="color: #b36b00; text-decoration: none;">{{ item.book.title }}</a>
+                    </h4>
+                    <p style="color: #5a3e00; margin-bottom: 6px;"><strong>Author:</strong> {{ item.book.author }}</p>
+                    <p style="color: #6f4e00; margin-bottom: 10px;">{{ item.book.description }}</p>
+                    <span style="display: inline-block; background: linear-gradient(90deg, #f8b500, #fceabb); color: #5a3e00; padding: 6px 16px; border-radius: 6px; font-weight: 600;">&#8377;{{ item.book.price }}</span>
+                    <form method="post" action="{% url 'remove_from_wishlist' item.book.id %}" style="margin-top: 12px;">
+                        {% csrf_token %}
+                        <button type="submit" class="custom-btn remove-btn" style="width: 100%; background: linear-gradient(90deg, #cc0000, #ff4e50);">Remove from Wishlist</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="color: #cc0000; font-size: 1.2rem;">Your wishlist is empty.</p>
+    {% endif %}
+</div>
+
+<style>
+.custom-btn {
+    padding: 12px 28px;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    margin: 0 5px;
+    transition: box-shadow 0.2s, background 0.2s;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+}
+.remove-btn {
+    background: linear-gradient(90deg, #cc0000, #ff4e50);
+}
+.custom-btn:hover {
+    box-shadow: 0 2px 8px #cc000055;
+    opacity: 0.92;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,28 @@
+<!-- filepath: bookstore/store/templates/store/logout.html -->
+{% extends "store/base.html" %}
+
+{% block content %}
+<div style="max-width: 400px; margin: 80px auto; background: linear-gradient(135deg, #e7f3fe 60%, #f5f7fa 100%); border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); padding: 36px 32px; text-align: center;">
+    <h2 style="color: #cc0000; margin-bottom: 24px;">You have been logged out</h2>
+    <a href="{% url 'login' %}" class="custom-btn login-btn" style="margin-top: 18px;">Login Again</a>
+    <a href="{% url 'dashboard' %}" class="custom-btn cart-btn" style="margin-top: 18px;">Go to Dashboard</a>
+</div>
+{% endblock %}
+
+<style>
+.custom-btn {
+    padding: 12px 28px;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    margin: 0 5px;
+    transition: box-shadow 0.2s, background 0.2s;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+}
+.login-btn { background: linear-gradient(90deg, #0077cc, #00c6ff); }
+.cart-btn { background: linear-gradient(90deg, #0077cc, #00c6ff); }
+.custom-btn:hover { box-shadow: 0 2px 8px #0077cc55; opacity: 0.92; }
+</style>

@@ -1,0 +1,69 @@
+{% extends "store/base.html" %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 40px auto;">
+    <h1 style="color: #0077cc;">{{ book.title }}</h1>
+    <p><strong>Author:</strong> {{ book.author }}</p>
+    <p><strong>Genre:</strong> {{ book.genre }}</p>
+    <p><strong>Price:</strong> &#8377;{{ book.price }}</p>
+    <p><strong>Stock:</strong> {{ book.stock }}</p>
+    {% if book.cover_image %}
+        <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" style="max-width: 300px; margin-bottom: 20px;">
+    {% endif %}
+    <p>{{ book.description }}</p>
+
+    <h3>Average Rating: {{ average_rating|default:"No ratings yet" }}</h3>
+
+    <h3>Reviews</h3>
+    {% if reviews %}
+        <ul>
+            {% for review in reviews %}
+                <li>
+                    <strong>{{ review.user.username }}</strong> rated {{ review.rating }} / 5<br>
+                    {{ review.comment }}<br>
+                    <small>{{ review.created_at|date:"M d, Y" }}</small>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No reviews yet.</p>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+    <h3>Add a Review</h3>
+    <form method="post" action="{% url 'add_review' book.id %}">
+        {% csrf_token %}
+        <label for="rating">Rating (1-5):</label>
+        <select name="rating" id="rating" required>
+            {% for i in "12345" %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endfor %}
+        </select><br><br>
+        <label for="comment">Comment:</label><br>
+        <textarea name="comment" id="comment" rows="4" cols="50"></textarea><br><br>
+        <button type="submit" class="custom-btn cart-btn">Submit Review</button>
+    </form>
+    {% else %}
+        <p><a href="{% url 'login' %}">Log in</a> to add a review.</p>
+    {% endif %}
+
+    <form method="post" action="{% url 'add_to_cart' book.id %}" style="margin-top: 20px;">
+        {% csrf_token %}
+        <button type="submit" class="custom-btn cart-btn">Add to Cart</button>
+    </form>
+
+    {% if user.is_authenticated %}
+    {% if book in user.wishlist.all.values_list('book', flat=True) %}
+        <form method="post" action="{% url 'remove_from_wishlist' book.id %}" style="margin-top: 10px;">
+            {% csrf_token %}
+            <button type="submit" class="custom-btn logout-btn">Remove from Wishlist</button>
+        </form>
+    {% else %}
+        <form method="post" action="{% url 'add_to_wishlist' book.id %}" style="margin-top: 10px;">
+            {% csrf_token %}
+            <button type="submit" class="custom-btn cart-btn">Add to Wishlist</button>
+        </form>
+    {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

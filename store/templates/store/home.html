@@ -1,0 +1,55 @@
+{% extends "store/base.html" %}
+
+{% block content %}
+<div class="welcome-message" style="max-width: 800px; margin: 40px auto; text-align: center;">
+    <h2>Welcome to Unique BookStore</h2>
+    <p>Explore all the book Collections</p>
+    <div style="margin-top: 30px;">
+        <a href="{% url 'dashboard' %}" class="custom-btn browse-btn" style="margin: 5px; padding: 12px 28px; background: linear-gradient(90deg, #0077cc, #00c6ff); color: white; border-radius: 8px; font-weight: 600; text-decoration: none; transition: box-shadow 0.2s, background 0.2s;">Browse Books</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'wishlist' %}" class="custom-btn wishlist-btn" style="margin: 5px;">My Wishlist</a>
+            <a href="{% url 'profile' %}" class="custom-btn profile-btn" style="margin: 5px;">My Profile</a>
+            <a href="{% url 'cart' %}" class="custom-btn cart-btn" style="margin: 5px;">My Cart</a>
+            <a href="{% url 'checkout' %}" class="custom-btn checkout-btn" style="margin: 5px;">Checkout</a>
+            <a href="{% url 'logout' %}" class="custom-btn logout-btn" style="margin: 5px;">Logout</a>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.custom-btn {
+    padding: 12px 28px;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    margin: 0 5px;
+    transition: box-shadow 0.2s, background 0.2s;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+}
+.browse-btn {
+    background: linear-gradient(90deg, #0077cc, #00c6ff);
+}
+.wishlist-btn {
+    background: linear-gradient(90deg, #ff7e5f, #feb47b);
+}
+.profile-btn {
+    background: linear-gradient(90deg, #6a11cb, #2575fc);
+}
+.cart-btn {
+    background: linear-gradient(90deg, #0077cc, #00c6ff);
+}
+.checkout-btn {
+    background: linear-gradient(90deg, #28a745, #a8e063);
+}
+.logout-btn {
+    background: linear-gradient(90deg, #cc0000, #ff4e50);
+}
+.custom-btn:hover {
+    box-shadow: 0 2px 8px #0077cc55;
+    opacity: 0.92;
+}
+</style>
+{% endblock %}

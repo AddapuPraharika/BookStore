@@ -1,0 +1,108 @@
+{% extends "store/base.html" %}
+
+{% block content %}
+<div style="max-width: 1100px; margin: 40px auto; text-align: center;">
+    <h1 style="font-size: 2.5rem; font-weight: bold; background: linear-gradient(90deg, #0077cc, #00c6ff); color: white; padding: 20px 0; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); margin-bottom: 10px;">
+        E-Bookstore
+    </h1>
+    <p style="font-size: 1.25rem; color: #0077cc; font-weight: 500; margin-bottom: 30px;">
+        Your one-stop shop for all your reading needs.
+    </p>
+    <form method="get" style="margin-bottom: 30px;">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search books by title..." 
+            style="width: 320px; padding: 12px; border-radius: 8px; border: 1px solid #0077cc; font-size: 1rem; margin-right: 8px;">
+        <button type="submit" style="padding: 12px 28px; background: linear-gradient(90deg, #0077cc, #00c6ff); color: white; border: none; border-radius: 8px; font-weight: 500; cursor: pointer;">
+            Search
+        </button>
+        <select name="genre" onchange="this.form.submit()" style="padding: 12px; border-radius: 8px; border: 1px solid #0077cc; font-size: 1rem; margin-left: 8px;">
+            <option value="">All Genres</option>
+            <option value="Comedy Books" {% if selected_genre == "Comedy Books" %}selected{% endif %}>Comedy Books</option>
+            <option value="Novels" {% if selected_genre == "Novels" %}selected{% endif %}>Novels</option>
+            <option value="Story Books" {% if selected_genre == "Story Books" %}selected{% endif %}>Story Books</option>
+            <option value="JEE Books" {% if selected_genre == "JEE Books" %}selected{% endif %}>JEE Books</option>
+            <option value="NEET Books" {% if selected_genre == "NEET Books" %}selected{% endif %}>NEET Books</option>
+            {% for genre in genres %}
+                <option value="{{ genre }}" {% if genre == selected_genre %}selected{% endif %}>{{ genre }}</option>
+            {% endfor %}
+        </select>
+    </form>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 30px;">
+        {% if user.is_authenticated %}
+            <a href="{% url 'cart' %}" class="custom-btn cart-btn">Cart</a>
+            <a href="{% url 'logout' %}" class="custom-btn logout-btn">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="custom-btn login-btn">Login</a>
+            <a href="{% url 'register' %}" class="custom-btn register-btn">Register</a>
+            <a href="{% url 'cart' %}" class="custom-btn cart-btn">Cart</a>
+        {% endif %}
+    </div>
+
+    {% if not_found %}
+        <p style="margin-top: 30px; color: #cc0000; font-size: 1.2rem;">Book not found.</p>
+    {% elif books_by_genre %}
+        {% for genre, books in books_by_genre.items %}
+            <h3 style="margin-top: 40px; font-size: 2rem; color: #0077cc; font-weight: 600;">{{ genre }}</h3>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 10px; margin-bottom: 30px;">
+                {% for book in books %}
+                    <div style="background: linear-gradient(135deg, #e7f3fe 60%, #f5f7fa 100%); border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); width: 260px; padding: 24px 18px; text-align: left; transition: transform 0.2s, box-shadow 0.2s;"
+                         onmouseover="this.style.transform='scale(1.04)';this.style.boxShadow='0 6px 24px #0077cc33'"
+                         onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 2px 12px rgba(0,0,0,0.08)'">
+                        <h4 style="margin-bottom: 8px; color: #0077cc; font-size: 1.3rem;">
+                            <a href="{% url 'book_detail' book.id %}" style="color: #0077cc; text-decoration: none;">{{ book.title }}</a>
+                        </h4>
+                        <p style="margin-bottom: 6px; color: #333;"><strong>Author:</strong> {{ book.author }}</p>
+                        <p style="margin-bottom: 10px; color: #555;">{{ book.description }}</p>
+                        <span style="display: inline-block; background: linear-gradient(90deg, #0077cc, #00c6ff); color: white; padding: 6px 16px; border-radius: 6px; font-weight: 500;">&#8377;{{ book.price }}</span>
+                        <form method="post" action="{% url 'add_to_cart' book.id %}" style="margin-top: 12px;">
+                            {% csrf_token %}
+                            <button type="submit" class="custom-btn cart-btn" style="width: 100%;">Add to Cart</button>
+                        </form>
+                        <form method="post" action="{% url 'add_to_wishlist' book.id %}" style="margin-top: 8px;">
+                            {% csrf_token %}
+                            <button type="submit" class="custom-btn wishlist-btn" style="width: 100%; background: linear-gradient(90deg, #ff7e5f, #feb47b);">Add to Wishlist</button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p style="margin-top: 30px; color: #cc0000; font-size: 1.2rem;">No books available.</p>
+    {% endif %}
+</div>
+
+<style>
+.custom-btn {
+    padding: 12px 28px;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    margin: 0 5px;
+    transition: box-shadow 0.2s, background 0.2s;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+}
+.login-btn { background: linear-gradient(90deg, #0077cc, #00c6ff); }
+.register-btn { background: linear-gradient(90deg, #28a745, #a8e063); }
+.cart-btn { background: linear-gradient(90deg, #0077cc, #00c6ff); }
+.logout-btn { background: linear-gradient(90deg, #cc0000, #ff4e50); }
+.custom-btn:hover { box-shadow: 0 2px 8px #0077cc55; opacity: 0.92; }
+.wishlist-btn {
+    background: linear-gradient(90deg, #ff7e5f, #feb47b);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: box-shadow 0.2s, background 0.2s;
+    width: 100%;
+    margin-top: 8px;
+}
+.wishlist-btn:hover {
+    box-shadow: 0 2px 8px #ff7e5faa;
+    opacity: 0.92;
+}
+</style>
+{% endblock %}
